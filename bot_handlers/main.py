@@ -6,27 +6,23 @@ from aiogram.filters import Command
 from aiogram.types import Message
 from asgiref.sync import sync_to_async
 
-# Django sozlamalarini yuklash
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'telegram_project.settings')
 django.setup()
 
 from bot.models import TelegramUser
 
 # Bot tokeni
-BOT_TOKEN = "8553491567:AAGruDlm4chAI76CuKwTSGJiNZxYoHSps44"
+BOT_TOKEN = "YourBotToken"# bot tokenini qoyasiz
 
-# Bot va dispatcher yaratish
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
-# /start handler
 @dp.message(Command("start"))
 async def start_command(message: Message):
     telegram_id = message.from_user.id
     username = message.from_user.username
     first_name = message.from_user.first_name
     
-    # Ma'lumotlar bazasiga saqlash
     get_or_create = sync_to_async(TelegramUser.objects.get_or_create)
     
     user, created = await get_or_create(
@@ -43,7 +39,6 @@ async def start_command(message: Message):
     else:
         await message.answer(f"Assalomu alaykum {first_name}! Xush kelibsiz.")
 
-# Botni ishga tushirish
 async def main():
     print("Bot ishga tushdi...")
     await dp.start_polling(bot)
